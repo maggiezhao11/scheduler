@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-export  function useVisualMode(initial) {
+export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
  
@@ -10,11 +10,11 @@ export  function useVisualMode(initial) {
         const copiedHistory = [...history]
         copiedHistory.pop()
         setMode(newMode);
-        setHistory([...copiedHistory, newMode])
+        setHistory(prev => ([...prev, mode]))
 
       } else {
         setMode(newMode);
-        setHistory([...history, newMode])
+        setHistory(prev => ([...prev, mode]))
       }
     }
 
@@ -23,7 +23,7 @@ export  function useVisualMode(initial) {
         const copiedHistory = [...history]
         setMode(history[history.length - 2])
         copiedHistory.pop()
-        setHistory(copiedHistory)
+        setHistory(prev => ([...prev, mode]))
       }
     }  
 
