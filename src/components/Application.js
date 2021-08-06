@@ -59,7 +59,7 @@ export default function Application(props) {
   const setDay = day => setState({ ...state, day });
 
   function bookInterview(id, interview) {
-    //console.log(id, interview);
+    console.log(id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -68,20 +68,17 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    // const newState = {
-    //   ...state, appointments: {...appointments} 
-    //   // ??? why correct answer is setState({...state, appointments}) ********
-    // };
-    // setState(newState)
-    // axios.put(`/api/appointments/:${id}`) ***** make data persistent
-    //   .then(response => {
-    //     setState({...state, appointments})
-    //   });
-    setState({...state, appointments})
+    return axios.put(`/api/appointments/${id}`, {interview}) 
+      .then(response => {
+        setState({...state, appointments})
+      });
+    // setState({...state, appointments})
+
   }
 
   const appointments = getAppointmentsForDay(state, state.day);
   const interviewers = getInterviewersForDay(state, state.day);
+  console.log("interviewers:", interviewers);
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
     return (
@@ -92,7 +89,7 @@ export default function Application(props) {
       time={appointment.time}
       interview={interview}
       interviewers={interviewers}
-        
+      bookInterview={bookInterview}  
       /> )
     });
 
