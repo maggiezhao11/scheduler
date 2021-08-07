@@ -1,12 +1,28 @@
 import {useState, useEffect} from "react";
 import axios from "axios";
 
-export default function useApplicationData(initial) {
+// const webSocketsServerPort = 8001;
+// const webSocketServer = require('websocket').server;
+// const http = require('http');
 
-  // const [days, setDays] = useState([]);
-  // const [day, setDay] = useState('Monday');
-  // const [appointments, setAppointments] = useState({})
-  //combined all states into one state object, then use the action setState to update it going forward
+// const server = http.createServer();
+// server.listen(webSocketsServerPort);
+// console.log('listening on port 8001');
+
+// const wsServer = new webSocketServer({
+//   httpServer: server
+// });
+
+// const clients = {};
+
+// wsServer.on('request', function (request) {
+//   console.log("wsServer is on");
+// })
+
+
+
+
+export default function useApplicationData(initial) {
   
   const [state, setState] = useState({
     day: "Monday",
@@ -17,8 +33,31 @@ export default function useApplicationData(initial) {
   
   const setDay = day => setState({ ...state, day });
 
+  const updatedSpots = (state, currentDayObj) =>{
+    const currentDayObjIndex = state.days.findIndex(dayObj => dayObj.name === currentDayObj.name)
+    const listOfAppointmentIds = currentDayObj.appointments
+    const listOfFreeAppointments = 
+      listOfAppointmentIds.filter(appointmentId => {
+      const appointment = state.appointments[appointmentId]
+      if(!appointment.interview){
+        return true
+      } return false
+    })
+    const newSpots = listOfFreeAppointments.length
+    const updatedState = {...state}
+      updatedState.days = [...state.days]
+    const updatedDay = {...currentDayObj} 
+      updatedDay.spots = newSpots
+      updatedState.days[currentDayObjIndex] = updatedDay
+    return updatedState;
+  }
+
   function bookInterview(id, interview) {
-    console.log(id, interview);
+    const day = state.days.find(day => {
+      return day.appointments.find(appointmentId => { 
+       return appointmentId === id
+      })
+     })
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -29,48 +68,35 @@ export default function useApplicationData(initial) {
     };
     return axios.put(`/api/appointments/${id}`, {interview}) 
       .then(() => {
-        setState({...state, appointments})
+        console.log("before setState line 76", state )
+        setState(updatedSpots({...state, appointments}, day))
+        // setTimeout(() => console.log("after setState line 78", state))
       });
   }
 
   function cancelInterview(id) {
+    const day = state.days.find(day => {
+     return day.appointments.find(appointmentId => { 
+      return appointmentId === id
+     })
+    })
     return axios.delete(`/api/appointments/${id}`) 
       .then(() => {
         const appointment = {
           ...state.appointments[id],
-          interview: "null"
+          interview: null
         };
         const appointments = {
           ...state.appointments,
           [id]: appointment
         };
-        setState({...state, appointments})
-      });
-  }
-
-  // const appointments = getAppointmentsForDay(state, state.day);
-  // const interviewers = getInterviewersForDay(state, state.day);
-  // console.log("interviewers:", interviewers);
-  // const schedule = appointments.map((appointment) => {
-  //   const interview = getInterview(state, appointment.interview);
-  //   return (
-  //     <Appointment 
-  //     // key={appointment.id} {...appointment}  /// ****** here needs review codes
-  //     key={appointment.id}
-  //     id={appointment.id}
-  //     time={appointment.time}
-  //     interview={interview}
-  //     interviewers={interviewers}
-  //     bookInterview={bookInterview}
-  //     cancelInterview={CancelInterview}  
-  //     /> )
-  //   });
+        setState(updatedSpots({...state, appointments}, day))
+      })
+    }
+  
 
     useEffect(() => {
-      // axios.get('/api/days').then(response => {
-      //   // console.log("response.data:", response.data);
-      //   setDays([...response.data])
-      // });
+
       Promise.all([
         axios.get('/api/days'), //GET DAYS
         axios.get('/api/appointments'), //GET APPOINTMENTS

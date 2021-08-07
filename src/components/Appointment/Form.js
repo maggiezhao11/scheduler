@@ -7,8 +7,6 @@ export default function Form(props) {
   const {interviewers, onCancel, onSave} = props;
   const [name, setName] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  console.log("name:", name);
-  console.log("useState:", useState(props.name));
   const reset = () => {
     setName("");  
     setInterviewer(null);
@@ -34,7 +32,7 @@ export default function Form(props) {
             */
           />
         </form>
-        <InterviewerList interviewers={interviewers} value={interviewer} onChange={setInterviewer} />
+        <InterviewerList interviewers={interviewers} value={interviewer} onChange={setInterviewer}/>
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
