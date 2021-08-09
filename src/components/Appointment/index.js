@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "components/Appointment/styles.scss";
 import Show from "components/Appointment/Show";
 import Empty from "components/Appointment/Empty";
@@ -48,6 +48,15 @@ export default function Appointment(props) {
       transition(ERROR_DELETE, true)});
 
   }
+  //set side effect for stale state bug to check if we are in EMPTY mode with a truthy interview value when rendering component, 
+  useEffect(() => {
+    if (props.interview && mode === EMPTY) {
+     transition(SHOW);
+    }
+    if (props.interview === null && mode === SHOW) {
+     transition(EMPTY);
+    }
+   }, [props.interview, transition, mode]);
 
   return (
     <article className="appointment">

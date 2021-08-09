@@ -5,56 +5,6 @@ const WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 
 export default function useApplicationData(initial) {
-  const SET_DAY = "SET_DAY";
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-  const SET_INTERVIEW = "SET_INTERVIEW";
-
-  function reducer(state, action) {
-    switch (action.type) {
-      case SET_DAY:
-        return { ...state, day }
-      case SET_APPLICATION_DATA:
-        return { updatedSpots({...state, appointments}, day) }
-      case SET_INTERVIEW: {
-        const day = state.days.find(day => {
-          return day.appointments.find(appointmentId => { 
-           return appointmentId === id
-          })
-         })
-        if(!interview.values()) {
-          const appointment = {
-            ...state.appointments[id],
-            interview: { ...interview }
-          };
-          const appointments = {
-            ...state.appointments,
-            [id]: appointment
-          };
-        } else {
-          const appointment = {
-            ...state.appointments[id],
-            interview: null
-          };
-          const appointments = {
-            ...state.appointments,
-            [id]: appointment
-          };
-        }
-        return appointments;
-      }
-      default:
-        throw new Error(
-          `Tried to reduce with unsupported action type: ${action.type}`
-        );
-    }
-  }
-
-  const [state, dispatch] = useReducer(reducer, initial);
-  dispatch({type: "SET_DAY", value:state});
-  dispatch({type: "SET_APPLICATION_DATA", value:state});
-  dispatch({type: "SET_INTERVIEW", value:state});
-
-
   
   const [state, setState] = useState({
     day: "Monday",
