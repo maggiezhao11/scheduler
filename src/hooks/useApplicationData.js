@@ -2,6 +2,24 @@ import {useState, useEffect, useReducer} from "react";
 import axios from "axios";
 const WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
+const updatedSpots = (state, currentDayObj) =>{
+  const currentDayObjIndex = state.days.findIndex(dayObj => dayObj.name === currentDayObj.name)
+  const listOfAppointmentIds = currentDayObj.appointments
+  const listOfFreeAppointments = 
+    listOfAppointmentIds.filter(appointmentId => {
+    const appointment = state.appointments[appointmentId]
+    if(!appointment.interview){
+      return true
+    } return false
+  })
+  const newSpots = listOfFreeAppointments.length
+  const updatedState = {...state}
+    updatedState.days = [...state.days]
+  const updatedDay = {...currentDayObj} 
+    updatedDay.spots = newSpots
+    updatedState.days[currentDayObjIndex] = updatedDay
+  return updatedState;
+}
 
 
 export default function useApplicationData(initial) {
@@ -9,38 +27,31 @@ export default function useApplicationData(initial) {
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
 
+
   function reducer(state, action) {
+    const { day, days, interview, appointments, interviewers, id} = action; 
     switch (action.type) {
       case SET_DAY:
-        return { ...state, day }
+        return { ...state, day}
       case SET_APPLICATION_DATA:
-        return { updatedSpots({...state, appointments}, day) }
+        return { ...state, days, appointments, interviewers}
       case SET_INTERVIEW: {
         const day = state.days.find(day => {
           return day.appointments.find(appointmentId => { 
            return appointmentId === id
           })
          })
-        if(!interview.values()) {
+        
           const appointment = {
             ...state.appointments[id],
-            interview: { ...interview }
+            interview: interview 
           };
           const appointments = {
             ...state.appointments,
             [id]: appointment
           };
-        } else {
-          const appointment = {
-            ...state.appointments[id],
-            interview: null
-          };
-          const appointments = {
-            ...state.appointments,
-            [id]: appointment
-          };
-        }
-        return appointments;
+         
+        return updatedSpots({...state, appointments}, day);
       }
       default:
         throw new Error(
@@ -48,41 +59,24 @@ export default function useApplicationData(initial) {
         );
     }
   }
+  const initialState = {day:"Monday", days:[], appointments:{}};
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const setDay = day => dispatch({type: "SET_DAY", day});
+  const setInterview = (id, interview) => dispatch({type: "SET_INTERVIEW", id, interview})
+  const setApplicationData = (days, appointments, interviewers) => dispatch({type:"SET_APPLICATION_DATA", days, appointments, interviewers })
 
-  const [state, dispatch] = useReducer(reducer, initial);
-  dispatch({type: "SET_DAY", value:state});
-  dispatch({type: "SET_APPLICATION_DATA", value:state});
-  dispatch({type: "SET_INTERVIEW", value:state});
+  // dispatch({type: "SET_INTERVIEW", value:state});
 
 
   
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  });
+  // const [state, setState] = useState({
+  //   day: "Monday",
+  //   days: [],
+  //   appointments: {},
+  //   interviewers: {}
+  // });
   
-  const setDay = day => setState({ ...state, day });
-
-  const updatedSpots = (state, currentDayObj) =>{
-    const currentDayObjIndex = state.days.findIndex(dayObj => dayObj.name === currentDayObj.name)
-    const listOfAppointmentIds = currentDayObj.appointments
-    const listOfFreeAppointments = 
-      listOfAppointmentIds.filter(appointmentId => {
-      const appointment = state.appointments[appointmentId]
-      if(!appointment.interview){
-        return true
-      } return false
-    })
-    const newSpots = listOfFreeAppointments.length
-    const updatedState = {...state}
-      updatedState.days = [...state.days]
-    const updatedDay = {...currentDayObj} 
-      updatedDay.spots = newSpots
-      updatedState.days[currentDayObjIndex] = updatedDay
-    return updatedState;
-  }
+  // const setDay = day => dispatch({type: "SET_DAY", day});
 
   function bookInterview(id, interview) {
     const day = state.days.find(day => {
@@ -101,7 +95,7 @@ export default function useApplicationData(initial) {
     return axios.put(`/api/appointments/${id}`, {interview}) 
       .then(() => {
         console.log("before setState line 76", state )
-        setState(updatedSpots({...state, appointments}, day))
+        setInterview(id, interview)
         // setTimeout(() => console.log("after setState line 78", state))
       });
   }
@@ -122,7 +116,7 @@ export default function useApplicationData(initial) {
           ...state.appointments,
           [id]: appointment
         };
-        setState(updatedSpots({...state, appointments}, day))
+        setInterview(id, null)
       })
     }
   
@@ -137,20 +131,23 @@ export default function useApplicationData(initial) {
       //   webSocket.send("ping");
       // };
       webSocket.onmessage = function (event) {
+        
         // parse the event data(message) from server to convert string back to obj
         const parsedData = JSON.parse(event.data);
-        console.log("line 91:", parsedData);
+        console.log(parsedData);
+        // dispatch({type:parsedData.type...})==>show the data structure
+        dispatch({...parsedData});
       }
       
-      webSocket.onopen = function (event) {
-        webSocket.send("ping");
-      };
+      // webSocket.onopen = function (event) {
+      //   webSocket.send("ping");
+      // };
       Promise.all([
         axios.get('/api/days'), //GET DAYS
         axios.get('/api/appointments'), //GET APPOINTMENTS
         axios.get('/api/interviewers') //GET INTERVIEWERS
       ]).then((all) => {
-        setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
+        setApplicationData(all[0].data, all[1].data, all[2].data);
       })
     }, [])
 
