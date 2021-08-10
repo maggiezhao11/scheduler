@@ -1,17 +1,13 @@
-import {useState, useEffect, useReducer} from "react";
+import {useEffect, useReducer} from "react";
 import axios from "axios";
 const WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
-const updatedSpots = (state, currentDayObj) =>{
-  const currentDayObjIndex = state.days.findIndex(dayObj => dayObj.name === currentDayObj.name)
+const updatedSpots = (state, day) =>{
+  const currentDay = day || state.day
+  const currentDayObj = state.days.find(dayObj => dayObj.name === currentDay)
+  const currentDayObjIndex = state.days.findIndex(dayObj => dayObj.name === currentDay)
   const listOfAppointmentIds = currentDayObj.appointments
-  const listOfFreeAppointments = 
-    listOfAppointmentIds.filter(appointmentId => {
-    const appointment = state.appointments[appointmentId]
-    if(!appointment.interview){
-      return true
-    } return false
-  })
+  const listOfFreeAppointments = listOfAppointmentIds.filter(appointmentId => !state.appointments[appointmentId].interview)
   const newSpots = listOfFreeAppointments.length
   const updatedState = {...state}
     updatedState.days = [...state.days]
@@ -27,21 +23,15 @@ export default function useApplicationData(initial) {
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
 
-
   function reducer(state, action) {
-    const { day, days, interview, appointments, interviewers, id} = action; 
-    switch (action.type) {
+    const { type, day, days, interview, appointments, interviewers, id} = action; 
+    //switch(action.type)
+    switch (type) {
       case SET_DAY:
         return { ...state, day}
       case SET_APPLICATION_DATA:
         return { ...state, days, appointments, interviewers}
       case SET_INTERVIEW: {
-        const day = state.days.find(day => {
-          return day.appointments.find(appointmentId => { 
-           return appointmentId === id
-          })
-         })
-        
           const appointment = {
             ...state.appointments[id],
             interview: interview 
@@ -55,7 +45,7 @@ export default function useApplicationData(initial) {
       }
       default:
         throw new Error(
-          `Tried to reduce with unsupported action type: ${action.type}`
+          `Tried to reduce with unsupported action type: ${type}`
         );
     }
   }
@@ -65,57 +55,17 @@ export default function useApplicationData(initial) {
   const setInterview = (id, interview) => dispatch({type: "SET_INTERVIEW", id, interview})
   const setApplicationData = (days, appointments, interviewers) => dispatch({type:"SET_APPLICATION_DATA", days, appointments, interviewers })
 
-  // dispatch({type: "SET_INTERVIEW", value:state});
-
-
-  
-  // const [state, setState] = useState({
-  //   day: "Monday",
-  //   days: [],
-  //   appointments: {},
-  //   interviewers: {}
-  // });
-  
-  // const setDay = day => dispatch({type: "SET_DAY", day});
-
   function bookInterview(id, interview) {
-    const day = state.days.find(day => {
-      return day.appointments.find(appointmentId => { 
-       return appointmentId === id
-      })
-     })
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
     return axios.put(`/api/appointments/${id}`, {interview}) 
       .then(() => {
-        console.log("before setState line 76", state )
         setInterview(id, interview)
         // setTimeout(() => console.log("after setState line 78", state))
       });
   }
 
   function cancelInterview(id) {
-    const day = state.days.find(day => {
-     return day.appointments.find(appointmentId => { 
-      return appointmentId === id
-     })
-    })
     return axios.delete(`/api/appointments/${id}`) 
       .then(() => {
-        const appointment = {
-          ...state.appointments[id],
-          interview: null
-        };
-        const appointments = {
-          ...state.appointments,
-          [id]: appointment
-        };
         setInterview(id, null)
       })
     }
@@ -134,7 +84,6 @@ export default function useApplicationData(initial) {
         
         // parse the event data(message) from server to convert string back to obj
         const parsedData = JSON.parse(event.data);
-        console.log(parsedData);
         // dispatch({type:parsedData.type...})==>show the data structure
         dispatch({...parsedData});
       }

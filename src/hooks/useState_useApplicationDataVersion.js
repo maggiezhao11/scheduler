@@ -1,4 +1,4 @@
-import {useState, useEffect, useReducer} from "react";
+import {useState, useEffect} from "react";
 import axios from "axios";
 const WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
