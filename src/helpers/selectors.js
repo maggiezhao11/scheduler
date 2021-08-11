@@ -4,7 +4,7 @@ export function getAppointmentsForDay(state, selected_day) {
     return [];
   }
   const filteredAppointments = state.days.filter(day => {
-    if (day.name === selected_day) return true;
+    return day.name === selected_day ? true : false
   });
   const getAppointments = [];
   if (filteredAppointments.length === 0) {

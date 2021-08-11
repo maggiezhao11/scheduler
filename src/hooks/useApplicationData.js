@@ -1,9 +1,9 @@
 import {useEffect, useReducer} from "react";
 import axios from "axios";
 import reducer, {
-  SET_DAY,
-  SET_APPLICATION_DATA,
-  SET_INTERVIEW
+  // SET_DAY,
+  // SET_APPLICATION_DATA,
+  // SET_INTERVIEW
 } from "reducers/application";
 const WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
