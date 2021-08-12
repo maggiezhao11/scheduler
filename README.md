@@ -41,6 +41,8 @@ npm run storybook
 3. Start a second terminal for the API web server using the `npm start` command. The scheduler-api will be served at <http://localhost:8001/> for API.
 4. Go to <http://localhost:8080/> in your browser while having both terminal open running two servers.
 5. Open another browser window in order to experience the realtime experience with WebSocket server for tracking remaining spots everyday.
+5. Deploy it on Netlify. Go to <https://gracious-keller-b31420.netlify.app/> in your browser, and have a fun with the scheduler app.
+
 
 
 ## Dependencies
