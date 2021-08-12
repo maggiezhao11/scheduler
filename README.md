@@ -27,11 +27,11 @@ npm run storybook
 
 ## Final Product
 
-!["screenshot of scheduler overview"](https://github.com/maggiezhao11/tweeter/blob/master/docs/main-page-desktop.png)
+!["screenshot of scheduler overview"](https://github.com/maggiezhao11/scheduler/blob/master/docs/scheduler-overview.png)
 
-!["screenshot of interview form"](https://github.com/maggiezhao11/tweeter/blob/master/docs/main-page-tablet.png)
+!["screenshot of interview form"](https://github.com/maggiezhao11/scheduler/blob/master/docs/interview-form.png)
 
-!["screenshot of cancel confirm mode"](https://github.com/maggiezhao11/tweeter/blob/master/docs/main-page-tablet.png)
+!["screenshot of cancel confirm mode"](https://github.com/maggiezhao11/scheduler/blob/master/docs/cancel-confirm.png)
 
 ## Getting Started
 
@@ -49,10 +49,9 @@ npm run storybook
 - react-test-renderer
 
 ## Function
-- Create new tweets for user
-- Displays tweets in reverse-chronological order
-- New tweets input validation 
-- Set up responsive design on this app in order to fit different types of devices
-- Hide / show the new tweets text area by click a compose button on the right top side of nav bar.
-- Hide / show the back-to-top arrow icon at the right bottom of the screen which brings user back to the top of the page.
-- add animation effect for the right top arrow icon and the right bottom arrow.
+- Create new interview for user in empty slot
+- Displays existing interviews per day
+- Edit existing interviews 
+- Delete existing interviews
+- Offer realtime experience to multiple users on spot remaining information.
+- Switch views based on user requests
