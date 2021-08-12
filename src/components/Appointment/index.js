@@ -24,10 +24,8 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-
+    //save/create interview func
   function save(name, interviewer) {
-    // console.log("name:", name);
-    // console.log("interviewer:", interviewer)
     const interview = {
       student: name,
       interviewer
@@ -39,7 +37,8 @@ export default function Appointment(props) {
     .catch(error => transition(ERROR_SAVE, true));
   }
 
-  function cancel(event) {
+  //cancel interview func
+  function cancel() {
     transition(DELETING, true);
     props
     .cancelInterview(props.id)
@@ -58,6 +57,7 @@ export default function Appointment(props) {
     }
    }, [props.interview, transition, mode]);
 
+   //render page based on mode
   return (
     <article data-testid="appointment" className="appointment">
       <Header time={props.time} />
@@ -94,7 +94,9 @@ export default function Appointment(props) {
         {mode === ERROR_DELETE && <Error message="Could not cancel the appointment." 
           onClose={() => transition(SHOW)}
         />}
-        {mode === ERROR_SAVE && <Error message="Could not save the appointment."/>}  
+        {mode === ERROR_SAVE && <Error message="Could not save the appointment."
+          onClose={() => transition(CREATE)}
+        />}  
         
 
     </article>

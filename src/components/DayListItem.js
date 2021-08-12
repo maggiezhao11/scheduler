@@ -2,6 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import "components/DayListItem.scss";
 
+//remaining spot display func
 const formatSpot = (spots) => {
   if(spots === 0) {
     return "no spots remaining"

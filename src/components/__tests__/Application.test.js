@@ -32,9 +32,9 @@ describe("Appointment", () => {
     // 2. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
     const appointments = getAllByTestId(container, "appointment");
-    // console.log(prettyDOM(appointments))
+    // console.log(prettyDOM(appointments))==>the way to use prettyDOM func
     const appointment = appointments[0];
-    // debug(appointment);
+    // debug(appointment); ==> the way to use debug func
     // 3. Click the "Add" button on the first empty appointment.
     fireEvent.click(getByAltText(appointment, "Add"));
     // 4. Enter the name "Lydia Miller-Jones" into the input with the placeholder "Enter Student Name".
@@ -86,9 +86,7 @@ describe("Appointment", () => {
     // 2. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
     const appointments = getAllByTestId(container, "appointment");
-    console.log(prettyDOM(appointments))
     const appointment = appointments.find((appointment) => queryByText(appointment, "Archie Cohen"));
-    console.log(prettyDOM(appointment))
     // 3. Click the "Edit" button on the booked appointment.
     fireEvent.click(queryByAltText(appointment, "Edit"));
     // 4. change interviewer name

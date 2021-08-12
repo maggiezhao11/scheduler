@@ -1,5 +1,5 @@
 
-
+//function for updating remaining spots
 const updatedSpots = (state, day) =>{
   const currentDay = day || state.day
   const currentDayObj = state.days.find(dayObj => dayObj.name === currentDay)
@@ -15,6 +15,7 @@ const updatedSpots = (state, day) =>{
   return updatedState;
 }
 
+//useReducer version of useApplicationData
 export default function reducer(state, action) {
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";

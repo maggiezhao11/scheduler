@@ -1,10 +1,6 @@
 import {useEffect, useReducer} from "react";
 import axios from "axios";
-import reducer, {
-  // SET_DAY,
-  // SET_APPLICATION_DATA,
-  // SET_INTERVIEW
-} from "reducers/application";
+import reducer from "reducers/application";
 const WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 
@@ -21,7 +17,6 @@ export default function useApplicationData(initial) {
     return axios.put(`/api/appointments/${id}`, {interview}) 
       .then(() => {
         setInterview(id, interview)
-        // setTimeout(() => console.log("after setState line 78", state))
       });
   }
 
@@ -32,27 +27,15 @@ export default function useApplicationData(initial) {
       })
     }
   
-
-
     useEffect(() => {
       const webSocket = new WebSocket(WEBSOCKET_URL, "protocolOne");
-      //send data after the connection is established by onopen event handler
-      // webSocket.onopen = function (event) {
-      //   //we can use JSON.stringify() to convert an object to a string
-      //   // webSocket.send(JSON.stringify(msg));
-      //   webSocket.send("ping");
-      // };
-      webSocket.onmessage = function (event) {
-        
+      webSocket.onmessage = function (event) {       
         // parse the event data(message) from server to convert string back to obj
         const parsedData = JSON.parse(event.data);
         // dispatch({type:parsedData.type...})==>show the data structure
         dispatch({...parsedData});
       }
       
-      // webSocket.onopen = function (event) {
-      //   webSocket.send("ping");
-      // };
       Promise.all([
         axios.get('/api/days'), //GET DAYS
         axios.get('/api/appointments'), //GET APPOINTMENTS
@@ -61,9 +44,6 @@ export default function useApplicationData(initial) {
         setApplicationData(all[0].data, all[1].data, all[2].data);
       })
     }, [])
-
-
-
 
   return {state, setDay, bookInterview, cancelInterview};
 }

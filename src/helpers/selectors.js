@@ -15,7 +15,7 @@ export function getAppointmentsForDay(state, selected_day) {
       if (item === state.appointments[appointment].id) {
         getAppointments.push(state.appointments[appointment]);
       }
-    } return true //add return true for warning
+    } return true 
   });
   return getAppointments;
 }
@@ -26,7 +26,6 @@ export function getInterviewersForDay(state, selected_day) {
   } 
   const filteredInterviewers = state.days.filter(day => {
     return day.name === selected_day ? true : false
-    // if (day.name === selected_day) return true; 
   });
   const getInterviewers = [];
   
@@ -38,7 +37,7 @@ export function getInterviewersForDay(state, selected_day) {
       if (item === state.interviewers[interviewer].id) {
         getInterviewers.push(state.interviewers[interviewer]);
       }
-    } return true //add return true for warning
+    } return true
   });
   return getInterviewers;
 }

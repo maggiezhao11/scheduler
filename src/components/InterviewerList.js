@@ -31,6 +31,7 @@ function InterviewerList(props) {
     )
 }
 
+//interviewers data validation
 InterviewerList.propTypes = {
   interviewers: PropTypes.array.isRequired
 };

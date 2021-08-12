@@ -1,8 +1,8 @@
+//useEffect version of useApplicationData file before refactoring by useReducer.
+
 import {useState, useEffect} from "react";
 import axios from "axios";
 const WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
-
-
 
 export default function useApplicationData(initial) {
   
@@ -52,7 +52,6 @@ export default function useApplicationData(initial) {
       .then(() => {
         console.log("before setState line 76", state )
         setState(updatedSpots({...state, appointments}, day))
-        // setTimeout(() => console.log("after setState line 78", state))
       });
   }
 
@@ -80,12 +79,6 @@ export default function useApplicationData(initial) {
 
     useEffect(() => {
       const webSocket = new WebSocket(WEBSOCKET_URL, "protocolOne");
-      //send data after the connection is established by onopen event handler
-      // webSocket.onopen = function (event) {
-      //   //we can use JSON.stringify() to convert an object to a string
-      //   // webSocket.send(JSON.stringify(msg));
-      //   webSocket.send("ping");
-      // };
       webSocket.onmessage = function (event) {
         // parse the event data(message) from server to convert string back to obj
         const parsedData = JSON.parse(event.data);

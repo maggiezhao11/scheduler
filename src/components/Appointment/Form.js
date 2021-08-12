@@ -16,6 +16,7 @@ export default function Form(props) {
     reset();
     onCancel();
   }
+  //validate user input, student name cannot be empty.
   function validate() {
     if (name === "") {
       setError("Student name cannot be blank");
@@ -36,7 +37,7 @@ export default function Form(props) {
             placeholder="Enter Student Name"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            data-testid="student-name-input"
+            data-testid="student-name-input"  //add testid for test target
           />
           <section className="appointment__validation">{error}</section>
         </form>
