@@ -22,6 +22,7 @@ export default function Form(props) {
       setError("Student name cannot be blank");
       return;
     } 
+    //add validation for interviewer input, interviewer cannot be blank
     if (interviewer === null) {
       setError("You haven't chosen any interviewers yet!");
       return;
