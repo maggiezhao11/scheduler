@@ -31,11 +31,13 @@ export default function Form(props) {
     onSave(name, interviewer);
   }
 
+  //add new function here for better handle student name error info., the error info will be removed after user starts to type
    const handleTyping = (event) => {
     setError(""); 
     setName(event.target.value)
    }
 
+   //add new function here for better handle interviewer error info., the error info will be removed after user starts to type
    const handleInterviewers = (event) => {
     setError(""); 
     setInterviewer(event);
