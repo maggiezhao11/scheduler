@@ -1,3 +1,5 @@
+//refactor to replace array.filter by array.find
+
 
 export function getAppointmentsForDay(state, selected_day) {
   if (state.days.length <= 0) {
