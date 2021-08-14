@@ -44,7 +44,6 @@ npm run storybook
 5. Deploy it on Netlify. Go to <https://gracious-keller-b31420.netlify.app/> in your browser, and have a fun with the scheduler app.
 
 
-
 ## Dependencies
 - axios
 - Node 12.x or above
@@ -54,14 +53,8 @@ npm run storybook
 - react-scripts
 - nvm
 - normalize.css
-- node-sass
-- prop-types
 - classnames
-- testing-library/jest-dom
-- testing-library/react
-- testing-library/react-hooks
-- storybook
-- babel
+
 
 
 ## Function

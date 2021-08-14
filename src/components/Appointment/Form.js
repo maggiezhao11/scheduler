@@ -37,9 +37,7 @@ export default function Form(props) {
 
    const handleInterviewers = (event) => {
     setError(""); 
-    console.log("before event:", event)
     setInterviewer(event);
-    console.log("after event:", event)
    }
 
 
