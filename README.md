@@ -48,7 +48,21 @@ npm run storybook
 ## Dependencies
 - axios
 - Node 12.x or above
+- react
+- react-dom
 - react-test-renderer
+- react-scripts
+- nvm
+- normalize.css
+- node-sass
+- prop-types
+- classnames
+- testing-library/jest-dom
+- testing-library/react
+- testing-library/react-hooks
+- storybook
+- babel
+
 
 ## Function
 - Create new interview for user in empty slot
