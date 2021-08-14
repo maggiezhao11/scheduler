@@ -6,39 +6,41 @@ export function getAppointmentsForDay(state, selected_day) {
     return [];
   }
   //change array method from filter to find for better practice, no need to use index [0] later.
-  const filteredAppointments = state.days.find(day => {
+  const targetDay = state.days.find(day => {
     return day.name === selected_day ? true : false
   });
-  const getAppointments = [];
+
   // if (filteredAppointments.length === 0) { ==> filter version
-  if (filteredAppointments === null) {
+  if (targetDay === null) {
     return [];
   }
-  Object.keys(state.appointments).map(appointment => { 
-    // for ( let item of filteredAppointments[0].appointments)  { ==>filter version
-    for ( let item of filteredAppointments.appointments)  {
-      if (item === state.appointments[appointment].id) {
-        getAppointments.push(state.appointments[appointment]);
-      }
-    } return true 
+  const filteredAppointments = Object.keys(state.appointments).filter(appointment =>  { 
+
+    targetDay.appointments.find(item => item === state.appointments[appointment].id )
+
+    // for ( let item of filteredAppointments.appointments)  {
+    //   if (item === state.appointments[appointment].id) {
+    //     return true ;
+    //   }
+    // } 
   });
-  return getAppointments;
+  return filteredAppointments;
 }
 
 export function getInterviewersForDay(state, selected_day) {
   if (state.days.length <= 0) {
     return [];
   } 
-  const filteredInterviewers = state.days.find(day => {
+  const targetDay = state.days.find(day => {
     return day.name === selected_day ? true : false
   });
   const getInterviewers = [];
   
-  if (filteredInterviewers === null) {
+  if (targetDay === null) {
     return [];
   }
   Object.keys(state.interviewers).map(interviewer => {
-    for ( let item of filteredInterviewers.interviewers)  {
+    for ( let item of targetDay.interviewers)  {
       if (item === state.interviewers[interviewer].id) {
         getInterviewers.push(state.interviewers[interviewer]);
       }

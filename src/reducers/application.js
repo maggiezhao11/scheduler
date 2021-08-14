@@ -1,19 +1,27 @@
 
 //function for updating remaining spots
-const updatedSpots = (state, day) =>{
+
+const calculateSpots = (state, day) =>{
   const currentDay = day || state.day
   const currentDayObj = state.days.find(dayObj => dayObj.name === currentDay)
   const currentDayObjIndex = state.days.findIndex(dayObj => dayObj.name === currentDay)
   const listOfAppointmentIds = currentDayObj.appointments
   const listOfFreeAppointments = listOfAppointmentIds.filter(appointmentId => !state.appointments[appointmentId].interview)
   const newSpots = listOfFreeAppointments.length
+  return {newSpots, currentDayObj, currentDayObjIndex};
+}
+
+const updatedSpots = (state, day) =>{
+  const {newSpots, currentDayObj, currentDayObjIndex} = calculateSpots(state, day)
   const updatedState = {...state}
     updatedState.days = [...state.days]
   const updatedDay = {...currentDayObj} 
     updatedDay.spots = newSpots
     updatedState.days[currentDayObjIndex] = updatedDay
+
   return updatedState;
 }
+
 
 //useReducer version of useApplicationData
 export default function reducer(state, action) {

@@ -22,26 +22,41 @@ export default function Form(props) {
       setError("Student name cannot be blank");
       return;
     } 
+    if (interviewer === null) {
+      setError("You haven't chosen any interviewers yet!");
+      return;
+    } 
     setError("");
+    console.log("interviewer:", interviewer)
     onSave(name, interviewer);
   }
+   const handleTyping = (event) => {
+    setError(""); 
+    setName(event.target.value)
+   }
+
+   const handleInterviewers = (event) => {
+    setError(""); 
+    setInterviewer(event);
+   }
+
 
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
-        <form autoComplete="off">
+        <form autoComplete="off" onSubmit={(event) => event.preventDefault()} >
           <input
             className="appointment__create-input text--semi-bold"
             name="name"
             type="text"
             placeholder="Enter Student Name"
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={handleTyping}
             data-testid="student-name-input"  //add testid for test target
           />
           <section className="appointment__validation">{error}</section>
         </form>
-        <InterviewerList interviewers={interviewers} value={interviewer} onChange={setInterviewer}/>
+        <InterviewerList interviewers={interviewers} value={interviewer} onChange={handleInterviewers}/>
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
