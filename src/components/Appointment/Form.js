@@ -27,9 +27,9 @@ export default function Form(props) {
       return;
     } 
     setError("");
-    console.log("interviewer:", interviewer)
     onSave(name, interviewer);
   }
+
    const handleTyping = (event) => {
     setError(""); 
     setName(event.target.value)
@@ -37,7 +37,9 @@ export default function Form(props) {
 
    const handleInterviewers = (event) => {
     setError(""); 
+    console.log("before event:", event)
     setInterviewer(event);
+    console.log("after event:", event)
    }
 
 

@@ -17,7 +17,8 @@ export default function InterviewerListItem(props) {
     "interviewers__item--selected":selected
   });
   return (
-    <li className={interviewerClass} onClick={props.setInterviewer}>
+    //only call the function inline when we call it. 
+    <li className={interviewerClass} onClick={()=>props.setInterviewer(props.id)}> 
       <img
         className="interviewers__item-image"
         src={avatar}

@@ -1,6 +1,6 @@
 
 //function for updating remaining spots
-
+//separate previous chunk updateSpots func to two separate func.
 const calculateSpots = (state, day) =>{
   const currentDay = day || state.day
   const currentDayObj = state.days.find(dayObj => dayObj.name === currentDay)
